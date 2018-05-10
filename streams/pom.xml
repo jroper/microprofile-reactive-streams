@@ -22,7 +22,7 @@
 
     <groupId>org.eclipse.microprofile.reactive.streams</groupId>
     <artifactId>microprofile-reactive-streams-parent</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0-alpha-jroper-1</version>
     <packaging>pom</packaging>
     <name>MicroProfile Reactive Streams</name>
     <description>Eclipse MicroProfile Reactive Streams Support :: Parent POM</description>
@@ -40,7 +40,7 @@
 
     <licenses>
         <license>
-            <name>Apache License, Version 2.0</name>
+            <name>Apache-2.0</name>
             <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
             <distribution>repo</distribution>
             <comments>A business-friendly OSS license</comments>
@@ -236,6 +236,23 @@
     </build>
     
     <profiles>
+        <profile>
+            <!-- This allows custom deployments to arbitrary repositories,
+                 these properties are probably best set with profiles in 
+                 settings.xml
+            -->
+            <id>custom-deploy</id>
+            <distributionManagement>
+                <repository>
+                    <id>${custom-deploy.id}</id>
+                    <url>${custom-deploy.url}</url>
+                </repository>
+                <snapshotRepository>
+                    <id>${custom-deploy.id}</id>
+                    <url>${custom-deploy.url}</url>
+                </snapshotRepository>
+            </distributionManagement>
+        </profile>
         <profile>
             <id>release</id>
             <build>
