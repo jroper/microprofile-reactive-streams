@@ -342,7 +342,14 @@ public final class PublisherBuilder<T> extends ReactiveStreamsBuilder {
     return new PublisherBuilder<>(new Stage.ProcessorStage(processor), this);
   }
 
-  Graph toGraph() {
+  /**
+   * Create the graph for this publisher builder.
+   *
+   * This is primarily useful for engines that want to convert a graph directly to their representations.
+   *
+   * @return The graph.
+   */
+  public Graph toGraph() {
     return toGraph(false, true);
   }
 

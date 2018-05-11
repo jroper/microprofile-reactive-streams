@@ -19,6 +19,7 @@
 
 package org.eclipse.microprofile.reactive.streams;
 
+import org.eclipse.microprofile.reactive.streams.spi.Graph;
 import org.eclipse.microprofile.reactive.streams.spi.ReactiveStreamsEngine;
 import org.eclipse.microprofile.reactive.streams.spi.Stage;
 
@@ -56,6 +57,17 @@ public final class CompletionBuilder<T> extends ReactiveStreamsBuilder {
    * @return A completion stage that will be redeemed with the result of the stream, or an error if the stream fails.
    */
   public CompletionStage<T> run(ReactiveStreamsEngine engine) {
-    return engine.buildCompletion(toGraph(false, false));
+    return engine.buildCompletion(toGraph());
+  }
+
+  /**
+   * Create the graph for this completion builder.
+   *
+   * This is primarily useful for engines that want to convert a graph directly to their representations.
+   *
+   * @return The graph.
+   */
+  public Graph toGraph() {
+    return toGraph(false, false);
   }
 }

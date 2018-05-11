@@ -19,6 +19,7 @@
 
 package org.eclipse.microprofile.reactive.streams;
 
+import org.eclipse.microprofile.reactive.streams.spi.Graph;
 import org.eclipse.microprofile.reactive.streams.spi.ReactiveStreamsEngine;
 import org.eclipse.microprofile.reactive.streams.spi.Stage;
 
@@ -56,6 +57,17 @@ public final class SubscriberBuilder<T, R> extends ReactiveStreamsBuilder {
    * @return A {@link SubscriberWithResult} that will run this stream.
    */
   public SubscriberWithResult<T, R> build(ReactiveStreamsEngine engine) {
-    return engine.buildSubscriber(toGraph(true, false));
+    return engine.buildSubscriber(toGraph());
+  }
+
+  /**
+   * Create the graph for this subscriber builder.
+   *
+   * This is primarily useful for engines that want to convert a graph directly to their representations.
+   *
+   * @return The graph.
+   */
+  public Graph toGraph() {
+    return toGraph(true, false);
   }
 }

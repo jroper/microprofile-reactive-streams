@@ -19,6 +19,7 @@
 
 package org.eclipse.microprofile.reactive.streams;
 
+import org.eclipse.microprofile.reactive.streams.spi.Graph;
 import org.eclipse.microprofile.reactive.streams.spi.ReactiveStreamsEngine;
 import org.eclipse.microprofile.reactive.streams.spi.Stage;
 import org.reactivestreams.Processor;
@@ -364,6 +365,17 @@ public final class ProcessorBuilder<T, R> extends ReactiveStreamsBuilder {
    * @return A {@link Processor} that will run this stream.
    */
   public Processor<T, R> buildRs(ReactiveStreamsEngine engine) {
-    return engine.buildProcessor(toGraph(true, true));
+    return engine.buildProcessor(toGraph());
+  }
+
+  /**
+   * Create the graph for this processor builder.
+   *
+   * This is primarily useful for engines that want to convert a graph directly to their representations.
+   *
+   * @return The graph.
+   */
+  public Graph toGraph() {
+    return toGraph(true, true);
   }
 }
