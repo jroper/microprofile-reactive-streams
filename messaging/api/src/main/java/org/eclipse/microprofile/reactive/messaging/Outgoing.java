@@ -30,5 +30,14 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Outgoing {
-  String topic();
+
+  /**
+   * The topic to publish to.
+   */
+  String topic() default "";
+
+  /**
+   * The messaging provider.
+   */
+  Class<? extends MessagingProvider> provider() default MessagingProvider.class;
 }
