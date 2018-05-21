@@ -34,7 +34,7 @@ public @interface Incoming {
   /**
    * The topic to subscribe to.
    */
-  String topic();
+  String topic() default "";
 
   /**
    * The messaging provider.
