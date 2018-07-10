@@ -33,6 +33,13 @@ public class MockPayload {
   public MockPayload() {
   }
 
+  /**
+   * Transform this message by appending -transformed to field1 and adding 100 to field2.
+   */
+  public MockPayload transform() {
+    return new MockPayload(field1 + "-transformed", field2 + 100);
+  }
+
   public String getField1() {
     return field1;
   }

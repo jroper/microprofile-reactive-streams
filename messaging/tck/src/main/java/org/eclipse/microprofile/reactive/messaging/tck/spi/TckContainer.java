@@ -21,6 +21,7 @@ package org.eclipse.microprofile.reactive.messaging.tck.spi;
 
 import org.jboss.arquillian.container.spi.client.deployment.DeploymentDescription;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -86,16 +87,16 @@ public interface TckContainer {
    * @param topics The topics to create and create the deployments for.
    * @return The deployments.
    */
-  List<DeploymentDescription> createDeployments(String... topics);
+  List<DeploymentDescription> createDeployments(Collection<String> topics);
 
   /**
    * Tear down the given topics.
    *
-   * This may mean deleting them. Note that {@link #createDeployments(String...)} should reset the topics if they exist, so implementing this isn't
+   * This may mean deleting them. Note that {@link #createDeployments(Collection)} should reset the topics if they exist, so implementing this isn't
    * strictly necessary, but is hygienic.
    *
    * @param topics The topics to tear down.
    */
-  void teardownTopics(String... topics);
+  void teardownTopics(Collection<String> topics);
 
 }

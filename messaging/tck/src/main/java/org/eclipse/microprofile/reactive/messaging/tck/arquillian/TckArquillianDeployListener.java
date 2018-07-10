@@ -33,7 +33,10 @@ import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -69,7 +72,7 @@ public class TckArquillianDeployListener {
 
   public void onBeforeDeploy(@Observes BeforeDeploy beforeDeploy, TestClass testClass) throws DeploymentException {
 
-    String[] topicNames = getTopicsUsedByTestClass(testClass);
+    Collection<String> topicNames = getTopicsUsedByTestClass(testClass);
 
     DeployableContainer<?> container = beforeDeploy.getDeployableContainer();
     DeploymentDescription description = beforeDeploy.getDeployment();
@@ -99,7 +102,7 @@ public class TckArquillianDeployListener {
 
   public void onAfterUnDeploy(@Observes AfterUnDeploy afterUnDeploy, TestClass testClass) throws DeploymentException {
 
-    String[] topicNames = getTopicsUsedByTestClass(testClass);
+    Collection<String> topicNames = getTopicsUsedByTestClass(testClass);
 
     DeployableContainer<?> container = afterUnDeploy.getDeployableContainer();
 
@@ -119,16 +122,29 @@ public class TckArquillianDeployListener {
     tckContainer.teardownTopics(topicNames);
   }
 
-  private String[] getTopicsUsedByTestClass(TestClass testClass) {
-    Topics topics = testClass.getAnnotation(Topics.class);
-    String[] topicNames;
-    if (topics != null) {
-      topicNames = topics.value();
+  private Collection<String> getTopicsUsedByTestClass(TestClass testClass) {
+    Collection<String> topics = new ArrayList<>();
+    try {
+      for (Method method : testClass.getMethods(Topics.class)) {
+        Object list = method.invoke(null);
+        if (list instanceof String[]) {
+          topics.addAll(Arrays.asList((String[]) list));
+        }
+        else if (list instanceof Collection) {
+          topics.addAll((Collection<String>) list);
+        }
+        else {
+          throw new RuntimeException("Don't know how to handle topics return type: " + list);
+        }
+      }
     }
-    else {
-      topicNames = new String[0];
+    catch (RuntimeException e) {
+      throw e;
     }
-    return topicNames;
+    catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+    return topics;
   }
 
 }
